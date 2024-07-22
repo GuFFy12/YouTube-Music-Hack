@@ -1,0 +1,40 @@
+{
+  "name": "youtube-music-hack",
+  "version": "1.0.0",
+  "description": "Hacking YouTube music to make it work as a native premium app",
+  "author": "GuFFy12",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack && yarn version --patch --no-commit-hooks",
+    "build:dev": "tsc dev/dev.ts --outDir ./dist && tsc dev/dev-server.ts --outDir ./dist",
+    "start:dev": "node dist/dev-server & webpack --watch",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+  },
+  "devDependencies": {
+    "@types/node": "18.16.12",
+    "@types/tampermonkey": "^4.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "prettier": "^2.3.2",
+    "ts-loader": "^9.4.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^5.0.0",
+    "webpack": "^5.87.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "userscript": {
+    "name": "YouTube Music Hack",
+    "namespace": "guffy12/youtube-music-hack",
+    "match": [
+      "*://music.youtube.com/*"
+    ],
+    "icon": "https://music.youtube.com/img/favicon_144.png",
+    "run-at": "document-start"
+  }
+}
