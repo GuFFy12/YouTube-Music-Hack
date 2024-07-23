@@ -1,6 +1,6 @@
 {
   "name": "youtube-music-hack",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Hacking YouTube music to make it work as a native premium app",
   "author": "GuFFy12",
   "license": "MIT",
@@ -35,6 +35,7 @@
       "*://music.youtube.com/*"
     ],
     "icon": "https://music.youtube.com/img/favicon_144.png",
-    "run-at": "document-start"
+    "run-at": "document-start",
+    "grant": "none"
   }
 }
