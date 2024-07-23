@@ -1,46 +1,32 @@
-async function bootstrap() {
-	function showMessage(message: string) {
-		const messageDiv = document.createElement('div');
-		messageDiv.textContent = message;
-		messageDiv.style.position = 'fixed';
-		messageDiv.style.bottom = '10px';
-		messageDiv.style.right = '10px';
-		messageDiv.style.padding = '10px';
-		messageDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-		messageDiv.style.color = 'white';
-		messageDiv.style.borderRadius = '5px';
-		messageDiv.style.zIndex = '10000';
-		document.body.appendChild(messageDiv);
-
-		setTimeout(() => {
-			messageDiv.remove();
-		}, 3000);
-	}
-
-	const originalAddEventListener = document.addEventListener;
-	document.addEventListener = function (
-		type: string,
-		listener: EventListenerOrEventListenerObject,
-		options?: boolean | AddEventListenerOptions,
-	) {
-		if (type === 'visibilitychange') {
-			showMessage('visibilitychange event listener prevented');
-			return;
-		}
-		originalAddEventListener.call(document, type, listener, options);
-	};
-
-	const originalRemoveEventListener = document.removeEventListener;
-	document.removeEventListener = function (
-		type: string,
-		listener: EventListenerOrEventListenerObject,
-		options?: boolean | AddEventListenerOptions,
-	) {
-		if (type === 'visibilitychange') {
-			showMessage('visibilitychange event listener removal attempted');
-			return;
-		}
-		originalRemoveEventListener.call(document, type, listener, options);
+interface YTcfg {
+	d(): {
+		WEB_PLAYER_CONTEXT_CONFIGS: {
+			WEB_PLAYER_CONTEXT_CONFIG_ID_MUSIC_WATCH: {
+				serializedExperimentFlags: string;
+			};
+		};
 	};
 }
-void bootstrap();
+
+interface Window {
+	ytcfg?: YTcfg;
+}
+
+function handleLoadEvent() {
+	if (window.ytcfg) {
+		const serializedExperimentFlags =
+			window.ytcfg.d().WEB_PLAYER_CONTEXT_CONFIGS.WEB_PLAYER_CONTEXT_CONFIG_ID_MUSIC_WATCH
+				.serializedExperimentFlags;
+
+		const newSerializedExperimentFlags = [
+			'mweb_allow_background_playback=true',
+		];
+
+		window.ytcfg.d().WEB_PLAYER_CONTEXT_CONFIGS.WEB_PLAYER_CONTEXT_CONFIG_ID_MUSIC_WATCH.serializedExperimentFlags =
+			newSerializedExperimentFlags.concat(serializedExperimentFlags.split('&')).filter(Boolean).join('&');
+
+		document.removeEventListener('load', handleLoadEvent, true);
+	}
+}
+
+document.addEventListener('load', handleLoadEvent, true);
